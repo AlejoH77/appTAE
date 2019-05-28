@@ -1,4 +1,11 @@
 library(shiny)
+library(dplyr)
+
+datos<-read.csv("TAE_201905272108.csv")
+datos<-datos[,-1]
+#cambio el tipo de dato a Date
+datos<-mutate(datos, FECHA = as.Date(FECHA))
+
 
 #Interfaz grafica
 ui <- fluidPage(
@@ -31,34 +38,35 @@ ui <- fluidPage(
                         sidebarPanel(
                           
                           # Input: Simple integer interval ----
-                          sliderInput("ano", "Año:",
-                                      min = 2014, max = 2018,
-                                      value = 2015),
+                          #sliderInput("ano", "Año:",
+                           #           min = 2014, max = 2018,
+                            #          value = 2015),
                           
                           # Input: Specification of range within an interval ----
-                          sliderInput("mes", "Mes:",
-                                      min = 1, max = 12,
-                                      value = c(2,5)),
+                          #sliderInput("mes", "Mes:",
+                           #           min = 1, max = 12,
+                            #          value = c(2,5)),
                           
-                          radioButtons("radio", label = h3("Año"),
-                                       choices = list("2014" = 2014, "2015" = 2015, "2016" = 2016, "2017" = 2017), 
-                                       selected = 2015),
+                          #radioButtons("radio", label = h3("Año"),
+                           #            choices = list("2014" = 2014, "2015" = 2015, "2016" = 2016, "2017" = 2017), 
+                            #           selected = 2015),
                           
                           dateRangeInput("dates", label = h3("Rango de fechas"))
                         ),
                         
-                        # Main panel for displaying outputs ----
+                        # Main panel para mostrar las salidas ----
                         mainPanel(
                           
                           # Output: Table summarizing the values entered ----
-                          tableOutput("values"),
+                          #tableOutput("values"),
                           
                           
-                          fluidRow(verbatimTextOutput("fecha")),
+                          #fluidRow(verbatimTextOutput("fecha"))
+                          
+                          dataTableOutput('table')
                           
                           
-                          
-                          fluidRow(verbatimTextOutput("radio"))
+                          #fluidRow(verbatimTextOutput("radio"))
                           
                         ),
                         
@@ -76,11 +84,12 @@ ui <- fluidPage(
 
 #logica de la app
 server <- function(input, output) {
-  # You can access the values of the widget (as a vector of Dates)
-  # with input$dates, e.g.
-  output$fecha <- renderPrint({ input$dates })
   
-  output$radio <- renderPrint({ input$radio })
+  output$table <- renderDataTable(filter(datos, FECHA >= input$dates[1]  & FECHA <= input$dates[2]))
+  
+  #output$fecha <- renderPrint({ class(as.integer(format(input$dates[1], "%Y"))) })
+  
+  #output$radio <- renderPrint({ input$radio })
   
 }
 
