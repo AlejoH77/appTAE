@@ -71,11 +71,11 @@ ui <- fluidPage(
                                  strong('El número expresa cuántos accidentes han ocurrido '), 'y el color expresa
                                  la ocurrencia de accidentes así: ',br(),
                                  strong('- Color Verde:'),
-                                 span(' Bajo', style = "color:green"),br(),
+                                 strong(span(' Bajo', style = "color:green")),br(),
                                  strong('- Color Amarillo:'),
-                                 span(' Medio', style = "color:yellow"),br(),
+                                 strong(span(' Medio', style = "color:yellow")),br(),
                                  strong('- Color Amarillo:'),
-                                 span(' Alto', style = "color:orange")),
+                                 strong(span(' Alto', style = "color:orange"))),
                                  fluidRow(
                                    column(12, align="center",
                                           dateRangeInput("Mapdates", label = h4("Ventana de tiempo"),
