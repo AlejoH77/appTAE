@@ -25,15 +25,31 @@ ui <- fluidPage(
              tabPanel("Home", 
                       withTags(
                         div(class="container center",
-                            h1("Bienvenidos", align="center"),
+                            h1("Bienvenidos", align="center", style = "font-family: 'Lobster', 
+                            cursive; font-size:4;font-weight: 1000; line-height: 1.1; color: #000000;"),
                             div(class="row",
                                 div(class="col-md-10  col-md-offset-1 videoWrapper",
                                     iframe(src = "https://www.youtube.com/embed/G1-HDDDK87M", height="50%", width="100%")
                                 )
                             )
                         )
-                        
-                      )
+                      ),
+                      div(id='divinf', align='center', style = "font-family: 'Lobster', 
+                          cursive; font-size:4;font-weight: 1000; line-height: 2; color: #000000;", 
+                          h3('Este sitio contiene ---------------------')),
+                      tags$footer(title="footer", align = "right", style = "
+                                  position:absolute;
+                                  bottom:0;
+                                  width:95%;
+                                  height:50px; /* Height of the footer */
+                                  padding: 10px;
+                                  background-color: whitesmoke;
+                                  z-index: 1000;",
+                                  p('Realizado por: Alex Contreras, Alexis Valencia, Alejandro Herrera, Mateo Ochoa, 
+                                    Lucas Muños, Santiago Cadavid'))
+                      #div(id='footer', align='center', h3('Tecnicas de aprendizaje estadístico'), br(),
+                       #   h4('Realizado por: '),'Alex Contreras, Alexis Valencia, Alejandro Herrera, Mateo Ochoa,
+                        #  Lucas Muños, Santiago Cadavid')
                       
              ),
              navbarMenu('Historico',
@@ -73,9 +89,9 @@ ui <- fluidPage(
                                  strong('- Color Verde:'),
                                  strong(span(' Bajo', style = "color:green")),br(),
                                  strong('- Color Amarillo:'),
-                                 strong(span(' Medio', style = "color:yellow")),br(),
-                                 strong('- Color Amarillo:'),
-                                 strong(span(' Alto', style = "color:orange"))),
+                                 strong(span(' Medio', style = "color:gold")),br(),
+                                 strong('- Color Naranja:'),
+                                 strong(span(' Alto', style = "color:darkorange"))),
                                  fluidRow(
                                    column(12, align="center",
                                           dateRangeInput("Mapdates", label = h4("Ventana de tiempo"),
