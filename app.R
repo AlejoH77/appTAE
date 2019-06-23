@@ -98,6 +98,7 @@ ui <- fluidPage(
                         )
              ),
              tabPanel("Predicción",
+                      div(id='divtitM', align='center', h3('Predictor por Mes')),
                       fluidRow(
                         column(4,
                                selectInput("comuMESPred",
@@ -123,6 +124,7 @@ ui <- fluidPage(
                                actionButton("showMes", "Predecir")
                         )
                       ),
+                      div(id='divtitS', align='center', h3('Predictor por Semana')),
                       fluidRow(
                         column(4,
                                selectInput("comuSEMPred",
@@ -148,6 +150,7 @@ ui <- fluidPage(
                                actionButton("showSem", "Predecir")
                         )
                       ),
+                      div(id='divtitD', align='center', h3('Predictor por Día')),
                       fluidRow(
                         column(4,
                                selectInput("comuDIAPred",
@@ -178,9 +181,7 @@ ui <- fluidPage(
                         column(12, align="center",
                                actionButton("showDia", "Predecir")
                         )
-                      ),
-                      DT::dataTableOutput('tableDIA')
-                      
+                      )
              )
   )
   
@@ -275,19 +276,6 @@ server <- function(input, output, session) {
     )
     )
   })
-  
-  output$tableDIA <- DT::renderDataTable(DT::datatable({
-    comaPredDIA <- subset(af1, COMUNA == input$comuDIAPred & PERIODO == input$anoDIAPred & MES == input$mesDIAPred)
-    mmm <- cforest(N_ACC_DIA_COMUNA~DIA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
-                   data = comaPredDIA,
-                   controls = cforest_unbiased(ntree = 100, mtry = 5))
-    pDIA <- predict(mmm, comaPredDIA, OOB = TRUE,
-                    type = "response")
-    marcoDIA <- data.frame(Año = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = pDIA)
-    marcoDIA <- subset(marcoDIA, Dia == input$diaPred)
-    resDIA <- mean(marcoDIA$N_ACC_DIA_COMUNA)
-    marcoDIA
-  }))
   
   
 }
