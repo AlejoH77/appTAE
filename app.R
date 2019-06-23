@@ -1,15 +1,17 @@
 library(shiny)
 library(dplyr)
 library(leaflet)
+library(party)
 
-datos<-read.csv("db_lat_long_11-06-2019.csv")
+datos<-read.csv("db_22-06-2019_Complete.csv")
 #no se muestra la columna #1
 datos<-datos[,-1]
 #cambio el tipo de dato a Date
 datos<-mutate(datos, FECHA = as.Date(FECHA))
+semanas <- data.frame(semana = week(af1$FECHA))
+datos<-cbind(datos, semanas)
 comunas <- unique(datos$COMUNA)
 Sbarrios <- unique(select(datos, COMUNA, BARRIO))
-barrios <- NULL
 
 
 #Interfaz grafica
@@ -36,20 +38,10 @@ ui <- fluidPage(
                       ),
                       div(id='divinf', align='center', style = "font-family: 'Lobster', 
                           cursive; font-size:4;font-weight: 1000; line-height: 2; color: #000000;", 
-                          h3('Este sitio contiene ---------------------')),
-                      tags$footer(title="footer", align = "right", style = "
-                                  position:absolute;
-                                  bottom:0;
-                                  width:95%;
-                                  height:50px; /* Height of the footer */
-                                  padding: 10px;
-                                  background-color: whitesmoke;
-                                  z-index: 1000;",
-                                  p('Realizado por: Alex Contreras, Alexis Valencia, Alejandro Herrera, Mateo Ochoa, 
-                                    Lucas Muños, Santiago Cadavid'))
+                          h3('Este sitio contiene ---------------------'))
                       #div(id='footer', align='center', h3('Tecnicas de aprendizaje estadístico'), br(),
-                       #   h4('Realizado por: '),'Alex Contreras, Alexis Valencia, Alejandro Herrera, Mateo Ochoa,
-                        #  Lucas Muños, Santiago Cadavid')
+                      #   h4('Realizado por: '),'Alex Contreras, Alexis Valencia, Alejandro Herrera, Mateo Ochoa,
+                      #  Lucas Muños, Santiago Cadavid')
                       
              ),
              navbarMenu('Historico',
@@ -84,14 +76,14 @@ ui <- fluidPage(
                                  p('En este mapa interactivo usted podrá visualizar el numero de accidentes por zonas acorde a una
                                  ventana de tiempo definida; las zonas irán cambiando de acuerdo al zoom que se realice en el 
                                  mapa. Cada zona se representa con un círculo que tiene un color y un número asociado.',
-                                 strong('El número expresa cuántos accidentes han ocurrido '), 'y el color expresa
+                                   strong('El número expresa cuántos accidentes han ocurrido '), 'y el color expresa
                                  la ocurrencia de accidentes así: ',br(),
-                                 strong('- Color Verde:'),
-                                 strong(span(' Bajo', style = "color:green")),br(),
-                                 strong('- Color Amarillo:'),
-                                 strong(span(' Medio', style = "color:gold")),br(),
-                                 strong('- Color Naranja:'),
-                                 strong(span(' Alto', style = "color:darkorange"))),
+                                   strong('- Color Verde:'),
+                                   strong(span(' Bajo', style = "color:green")),br(),
+                                   strong('- Color Amarillo:'),
+                                   strong(span(' Medio', style = "color:gold")),br(),
+                                   strong('- Color Naranja:'),
+                                   strong(span(' Alto', style = "color:darkorange"))),
                                  fluidRow(
                                    column(12, align="center",
                                           dateRangeInput("Mapdates", label = h4("Ventana de tiempo"),
@@ -100,25 +92,95 @@ ui <- fluidPage(
                                                          min = "2014-01-01",
                                                          max = "2018-12-31",
                                                          separator = " - ")
-                                          )
+                                   )
                                  ),
                                  leafletOutput("mymap")
-                        ),
-                        tabPanel("Resumen",
-                                 dateRangeInput("entrada", label = h4("Rango de fechas"),
-                                                start = "2013-01-01",
-                                                end = "2019-01-01",
-                                                separator = " - "),
-                                 selectInput("comunas", "Comunas", comunas),
-                                 selectInput("Ibarrios", "Barrios", ""),
-                                 #uiOutput('Ibarrios'),
-                                 actionButton("show", "Show modal dialog")
                         )
              ),
-             navbarMenu('Menu1',
-                        tabPanel("SubMenu1",
-                                 "hola"
+             tabPanel("Predicción",
+                      fluidRow(
+                        column(4,
+                               selectInput("comuMESPred",
+                                           "Comuna:",
+                                           unique(as.character(datos$COMUNA))
+                               )
+                        ),
+                        column(4, 
+                               selectInput("anoMESPred",
+                                           "Mes:",
+                                           unique(as.character(datos$PERIODO))
+                               )
+                        ),
+                        column(4, 
+                               selectInput("mesPred",
+                                           "Mes:",
+                                           unique(as.character(datos$MES))
+                               )
                         )
+                      ),
+                      fluidRow(
+                        column(12, align="center",
+                               actionButton("showMes", "Predecir")
+                        )
+                      ),
+                      fluidRow(
+                        column(4,
+                               selectInput("comuSEMPred",
+                                           "Comuna:",
+                                           unique(as.character(datos$COMUNA))
+                               )
+                        ),
+                        column(4, 
+                               selectInput("anoSEMPred",
+                                           "Año:",
+                                           unique(as.character(datos$PERIODO))
+                               )
+                        ),
+                        column(4, 
+                               selectInput("semPred",
+                                           "Semana:",
+                                           unique(as.character(datos$semana))
+                               )
+                        )
+                      ),
+                      fluidRow(
+                        column(12, align="center",
+                               actionButton("showSem", "Predecir")
+                        )
+                      ),
+                      fluidRow(
+                        column(4,
+                               selectInput("comuDIAPred",
+                                           "Comuna:",
+                                           unique(as.character(datos$COMUNA))
+                               )
+                        ),
+                        column(4, 
+                               selectInput("anoDIAPred",
+                                           "Año:",
+                                           unique(as.character(datos$PERIODO))
+                               )
+                        ),
+                        column(4, 
+                               selectInput("mesDIAPred",
+                                           "Mes:",
+                                           unique(as.character(datos$MES))
+                               )
+                        ),
+                        column(4, 
+                               selectInput("diaPred",
+                                           "Semana:",
+                                           unique(as.character(datos$DIA))
+                               )
+                        )
+                      ),
+                      fluidRow(
+                        column(12, align="center",
+                               actionButton("showDia", "Predecir")
+                        )
+                      ),
+                      #DT::dataTableOutput('tableDIA')
+                      
              )
   )
   
@@ -129,7 +191,6 @@ server <- function(input, output, session) {
   
   output$columns <- renderUI({
     barrioos <- select(filter(datos, COMUNA == input$comu), BARRIO)
-    #selectInput('barr', 'Columns', names(barrioos$BARRIO))
     selectInput('barr', 'Barrios', c('All',barrioos))
   })
   
@@ -145,6 +206,10 @@ server <- function(input, output, session) {
     data
   }))
   
+  output$tablePred <- DT::renderDataTable(DT::datatable({
+    
+  }))
+  
   output$mymap <- renderLeaflet({
     ndatos <- filter(datos, FECHA >= input$Mapdates[1]  & FECHA <= input$Mapdates[2])
     coordenadas <- data.frame("latitude"= ndatos$LATITUD, "longitude" = ndatos$LONGITUD)
@@ -153,13 +218,58 @@ server <- function(input, output, session) {
     )
   })
   
-  observeEvent(input$show, {
-    showModal(modalDialog(title = "Important message", 
-                          paste("Comuna seleccionada: ", input$comunas),
+  observeEvent(input$showMes, {
+    comaPred <- subset(datos, COMUNA == input$comuMESPred  & PERIODO == input$anoMESPred & MES == input$mesPred)
+    m19 <- cforest(N_ACC_MES_COMUNA~PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+                   data = comaPred,
+                   controls = cforest_unbiased(ntree = 100, mtry = 5))
+    #m19
+    p <- predict(m19, comaPred, OOB = TRUE,
+                 type = "response")
+    pred <- strtoi(p)
+    marco <- data.frame(Año = comaPred$PERIODO, Mes = comaPred$MES, Predicciones = pred)
+    res <- unique(marco)
+    res <- res[!is.na(res$Predicciones),]
+    showModal(modalDialog(title = paste(paste(paste("Predicción para el año ", comaPred$PERIODO), " en el mes "), comaPred$MES), 
+                          paste("Número de accidentes: ", res$Predicciones),
                           easyClose = TRUE
-                          )
-              )
-    })
+    )
+    )
+  })
+  
+  observeEvent(input$showSem, {
+    comaPredMES <- subset(af1, COMUNA == input$comuSEMPred & PERIODO == input$anoSEMPred & semana == input$semPred)
+    mmm <- cforest(N_ACC_SEMANA_COMUNA~DIA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+                   data = comaPredMES,
+                   controls = cforest_unbiased(ntree = 100, mtry = 5))
+    #mmm
+    pMES <- predict(mmm, comaPredMES, OOB = TRUE,
+                    type = "response")
+    predMES <- strtoi(pMES)
+    marcoMES <- data.frame(Año = comaPredMES$PERIODO, semana = comaPredMES$semana, Predicciones = predMES)
+    resMES <- unique(marcoMES)
+    resMES <- resMES[!is.na(resMES$Predicciones),]
+    showModal(modalDialog(title = paste(paste(paste("Predicción para la semana ", input$semPred), " del año "), input$anoSEMPred), 
+                          paste("Número de accidentes: ", resMES$Predicciones),
+                          easyClose = TRUE
+    )
+    )
+  })
+  
+  #output$tableDIA <- DT::renderDataTable(DT::datatable({
+  # comaPredDIA <- subset(af1, COMUNA == input$comuSEMPred & PERIODO == input$anoSEMPred & DIA == input$diaPred)
+  #  mmm <- cforest(N_ACC_DIA_COMUNA~DIA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+  #                 data = comaPredDIA,
+  #                 controls = cforest_unbiased(ntree = 100, mtry = 5))
+  #  #mmm
+  #  pDIA <- predict(mmm, comaPredDIA, OOB = TRUE,
+  #                  type = "response")
+  #  predDIA <- strtoi(pDIA)
+  #  marcoDIA <- data.frame(Año = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = predDIA)
+  #  resDIA <- unique(marcoDIA)
+  #  resDIA <- resDIA[!is.na(resDIA$Predicciones),]
+  #  resDIA
+  #}))
   
   #output$fecha <- renderPrint({ class(as.integer(format(input$dates[1], "%Y"))) })
   
