@@ -169,7 +169,7 @@ ui <- fluidPage(
                         ),
                         column(4, 
                                selectInput("diaPred",
-                                           "Semana:",
+                                           "Dia:",
                                            unique(as.character(datos$DIA))
                                )
                         )
@@ -179,7 +179,7 @@ ui <- fluidPage(
                                actionButton("showDia", "Predecir")
                         )
                       ),
-                      #DT::dataTableOutput('tableDIA')
+                      DT::dataTableOutput('tableDIA')
                       
              )
   )
@@ -256,24 +256,38 @@ server <- function(input, output, session) {
     )
   })
   
-  #output$tableDIA <- DT::renderDataTable(DT::datatable({
-  # comaPredDIA <- subset(af1, COMUNA == input$comuSEMPred & PERIODO == input$anoSEMPred & DIA == input$diaPred)
-  #  mmm <- cforest(N_ACC_DIA_COMUNA~DIA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
-  #                 data = comaPredDIA,
-  #                 controls = cforest_unbiased(ntree = 100, mtry = 5))
-  #  #mmm
-  #  pDIA <- predict(mmm, comaPredDIA, OOB = TRUE,
-  #                  type = "response")
-  #  predDIA <- strtoi(pDIA)
-  #  marcoDIA <- data.frame(Año = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = predDIA)
-  #  resDIA <- unique(marcoDIA)
-  #  resDIA <- resDIA[!is.na(resDIA$Predicciones),]
-  #  resDIA
-  #}))
+  observeEvent(input$showDia, {
+    comaPredDIA <- subset(af1, COMUNA == input$comuDIAPred & PERIODO == input$anoDIAPred & MES == input$mesDIAPred)
+    mmm <- cforest(N_ACC_DIA_COMUNA~DIA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+                   data = comaPredDIA,
+                   controls = cforest_unbiased(ntree = 100, mtry = 5))
+    pDIA <- predict(mmm, comaPredDIA, OOB = TRUE,
+                    type = "response")
+    marcoDIA <- data.frame(Año = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = pDIA)
+    marcoDIA <- subset(marcoDIA, Dia == input$diaPred)
+    resDIA <- mean(marcoDIA$N_ACC_DIA_COMUNA)
+    if(is.nan(resDIA)){
+      resDIA<-"No ocurriran accidentes"
+    }
+    showModal(modalDialog(title = paste(paste(paste(paste(paste("Predicción para el día ", input$diaPred), " del mes "), input$mesDIAPred), "del año "), input$anoDIAPred), 
+                          paste("Número de accidentes: ", resDIA),
+                          easyClose = TRUE
+    )
+    )
+  })
   
-  #output$fecha <- renderPrint({ class(as.integer(format(input$dates[1], "%Y"))) })
-  
-  #output$radio <- renderPrint({ input$radio })
+  output$tableDIA <- DT::renderDataTable(DT::datatable({
+    comaPredDIA <- subset(af1, COMUNA == input$comuDIAPred & PERIODO == input$anoDIAPred & MES == input$mesDIAPred)
+    mmm <- cforest(N_ACC_DIA_COMUNA~DIA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+                   data = comaPredDIA,
+                   controls = cforest_unbiased(ntree = 100, mtry = 5))
+    pDIA <- predict(mmm, comaPredDIA, OOB = TRUE,
+                    type = "response")
+    marcoDIA <- data.frame(Año = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = pDIA)
+    marcoDIA <- subset(marcoDIA, Dia == input$diaPred)
+    resDIA <- mean(marcoDIA$N_ACC_DIA_COMUNA)
+    marcoDIA
+  }))
   
   
 }
