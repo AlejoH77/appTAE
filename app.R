@@ -2,13 +2,15 @@ library(shiny)
 library(dplyr)
 library(leaflet)
 library(party)
+library(lubridate)
+library(DT)
 
 datos<-read.csv("db_22-06-2019_Complete.csv")
 #no se muestra la columna #1
 datos<-datos[,-1]
 #cambio el tipo de dato a Date
 datos<-mutate(datos, FECHA = as.Date(FECHA))
-semanas <- data.frame(semana = week(af1$FECHA))
+semanas <- data.frame(semana = week(datos$FECHA))
 datos<-cbind(datos, semanas)
 comunas <- unique(datos$COMUNA)
 Sbarrios <- unique(select(datos, COMUNA, BARRIO))
