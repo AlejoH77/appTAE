@@ -118,13 +118,13 @@ ui <- fluidPage(
                                    Se determinó que el número de grupos adecuado es de 4. Para la caracterización de los grupos en materia de
                                    accidentalidad tendremos las siguientes 4 categorías:',br(),
                                    strong('- Barrios con índices de accidentalidad tienden a ser altos, pero no lo suficiente como para considerarlos muy peligrosos:'),
-                                   strong(span(' CATEGORIA MEDIA ALTA', style = "color:red")),br(),
+                                   strong(span(' CATEGORIA MEDIA ALTA', style = "color:darkorange")),br(),
                                    strong('- Barrios pertenecientes a esta categoría se caracterizan por ser lugares que se consideran muy peligrosos:'),
-                                   strong(span('CATEGORIA ALTA', style = "color:darkorange")),br(),
+                                   strong(span('CATEGORIA ALTA', style = "color:red")),br(),
                                    strong('-Los barrios pertenecientes a esta categoría se caracterizan por ser lugares que se consideran tranquilos:'),
-                                   strong(span(' CATEGORIA BAJA', style = "color:gold")),br(),
+                                   strong(span(' CATEGORIA BAJA', style = "color:green")),br(),
                                    strong('- Barrios con índices de accidentalidad relativamente bajos, pero no tanto como para considerarlos bastante tranquilos:'),
-                                   strong(span('CATEGORIA MEDIA BAJA', style = "color:green"))),
+                                   strong(span('CATEGORIA MEDIA BAJA', style = "color:gold"))),
                                  leafletOutput("mymapcategory")
                         )                        
              ),
@@ -348,10 +348,10 @@ server <- function(input, output, session) {
     #Unión de los barrios con su categoria
     datos_listos <- join(datos_barrios, barrios_categorias)
     #Asignación de colores a la categoria
-    datos_listos$CATEGORIA <- gsub(1,"red", datos_listos$CATEGORIA )
-    datos_listos$CATEGORIA <- gsub(2,"orange", datos_listos$CATEGORIA )
-    datos_listos$CATEGORIA <- gsub(3,"yellow", datos_listos$CATEGORIA )
-    datos_listos$CATEGORIA <- gsub(4,"green", datos_listos$CATEGORIA )
+    datos_listos$CATEGORIA <- gsub(1,"orange", datos_listos$CATEGORIA )
+    datos_listos$CATEGORIA <- gsub(2,"red", datos_listos$CATEGORIA )
+    datos_listos$CATEGORIA <- gsub(3,"green", datos_listos$CATEGORIA )
+    datos_listos$CATEGORIA <- gsub(4,"yellow", datos_listos$CATEGORIA )
     barrios_med@data$NOMBRE <- iconv(barrios_med@data$NOMBRE, to="ASCII//TRANSLIT")
     barrios_med@data <- datos_listos
     m=leaflet(barrios_med) 
