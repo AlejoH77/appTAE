@@ -100,90 +100,184 @@ ui <- fluidPage(
                         )
              ),
              tabPanel("Predicción",
-                      div(id='divtitM', align='center', h3('Predictor por Mes')),
+                      
                       fluidRow(
-                        column(4,
-                               selectInput("comuMESPred",
-                                           "Comuna:",
-                                           unique(as.character(datos$COMUNA))
+                        column(6,
+                               div(id='divtitM', align='center', h2('Predicción por comuna')),
+                               div(id='divtitM', align='center', h3('Predictor por Mes')),
+                               fluidRow(
+                                 column(4,
+                                        selectInput("comuMESPred",
+                                                    "Comuna:",
+                                                    unique(as.character(datos$COMUNA))
+                                        )
+                                 ),
+                                 column(4, 
+                                        selectInput("anoMESPred",
+                                                    "Año:",
+                                                    unique(as.character(datos$PERIODO))
+                                        )
+                                 ),
+                                 column(4, 
+                                        selectInput("mesPred",
+                                                    "Mes:",
+                                                    unique(as.character(datos$MES))
+                                        )
+                                 )
+                               ),
+                               fluidRow(
+                                 column(12, align="center",
+                                        actionButton("showMes", "Predecir")
+                                 )
+                               ),
+                               div(id='divtitS', align='center', h3('Predictor por Semana')),
+                               fluidRow(
+                                 column(4,
+                                        selectInput("comuSEMPred",
+                                                    "Comuna:",
+                                                    unique(as.character(datos$COMUNA))
+                                        )
+                                 ),
+                                 column(4, 
+                                        selectInput("anoSEMPred",
+                                                    "Año:",
+                                                    unique(as.character(datos$PERIODO))
+                                        )
+                                 ),
+                                 column(4, 
+                                        selectInput("semPred",
+                                                    "Semana:",
+                                                    unique(as.character(datos$semana))
+                                        )
+                                 )
+                               ),
+                               fluidRow(
+                                 column(12, align="center",
+                                        actionButton("showSem", "Predecir")
+                                 )
+                               ),
+                               div(id='divtitD', align='center', h3('Predictor por Día')),
+                               fluidRow(
+                                 column(3,
+                                        selectInput("comuDIAPred",
+                                                    "Comuna:",
+                                                    unique(as.character(datos$COMUNA))
+                                        )
+                                 ),
+                                 column(3, 
+                                        selectInput("anoDIAPred",
+                                                    "Año:",
+                                                    unique(as.character(datos$PERIODO))
+                                        )
+                                 ),
+                                 column(3, 
+                                        selectInput("mesDIAPred",
+                                                    "Mes:",
+                                                    unique(as.character(datos$MES))
+                                        )
+                                 ),
+                                 column(3, 
+                                        selectInput("diaPred",
+                                                    "Dia:",
+                                                    unique(as.character(datos$DIA))
+                                        )
+                                 )
+                               ),
+                               fluidRow(
+                                 column(12, align="center",
+                                        actionButton("showDia", "Predecir")
+                                 )
                                )
-                        ),
-                        column(4, 
-                               selectInput("anoMESPred",
-                                           "Mes:",
-                                           unique(as.character(datos$PERIODO))
+                               ),
+                        column(6,
+                               div(id='divtitM', align='center', h2('Predicción por barrio')),
+                               div(id='divtitM', align='center', h3('Predictor por Mes')),
+                               fluidRow(
+                                 column(4,
+                                        selectInput("barrioMESPred",
+                                                    "Barrio:",
+                                                    unique(as.character(datos$BARRIO))
+                                        ) 
+                                 ),
+                                 column(4, 
+                                        selectInput("anoMESPredBarrio",
+                                                    "Año:",
+                                                    unique(as.character(datos$PERIODO))
+                                        )
+                                 ),
+                                 column(4, 
+                                        selectInput("mesPredBarrio",
+                                                    "Mes:",
+                                                    unique(as.character(datos$MES))
+                                        )
+                                 )
+                               ),
+                               fluidRow(
+                                 column(12, align="center",
+                                        actionButton("showMesBarrio", "Predecir")
+                                 )
+                               ),
+                               div(id='divtitS', align='center', h3('Predictor por Semana')),
+                               fluidRow(
+                                 column(4,
+                                        selectInput("barrioSEMPred",
+                                                    "Barrio:",
+                                                    unique(as.character(datos$BARRIO))
+                                        )
+                                 ),
+                                 column(4, 
+                                        selectInput("anoSEMPredBarrio",
+                                                    "Año:",
+                                                    unique(as.character(datos$PERIODO))
+                                        )
+                                 ),
+                                 column(4, 
+                                        selectInput("semPredBarrio",
+                                                    "Semana:",
+                                                    unique(as.character(datos$semana))
+                                        )
+                                 )
+                               ),
+                               fluidRow(
+                                 column(12, align="center",
+                                        actionButton("showSemBarrio", "Predecir")
+                                 )
+                               ),
+                               div(id='divtitD', align='center', h3('Predictor por Día')),
+                               fluidRow(
+                                 column(3,
+                                        selectInput("barrioDIAPred",
+                                                    "Barrio:",
+                                                    unique(as.character(datos$BARRIO))
+                                        )
+                                 ),
+                                 column(3, 
+                                        selectInput("anoDIAPredBarrio",
+                                                    "Año:",
+                                                    unique(as.character(datos$PERIODO))
+                                        )
+                                 ),
+                                 column(3, 
+                                        selectInput("mesDIAPredBarrio",
+                                                    "Mes:",
+                                                    unique(as.character(datos$MES))
+                                        )
+                                 ),
+                                 column(3, 
+                                        selectInput("diaPredBarrio",
+                                                    "Dia:",
+                                                    unique(as.character(datos$DIA))
+                                        )
+                                 )
+                               ),
+                               fluidRow(
+                                 column(12, align="center",
+                                        actionButton("showDiaBarrio", "Predecir")
+                                 )
                                )
-                        ),
-                        column(4, 
-                               selectInput("mesPred",
-                                           "Mes:",
-                                           unique(as.character(datos$MES))
-                               )
+                              )
+                        
                         )
-                      ),
-                      fluidRow(
-                        column(12, align="center",
-                               actionButton("showMes", "Predecir")
-                        )
-                      ),
-                      div(id='divtitS', align='center', h3('Predictor por Semana')),
-                      fluidRow(
-                        column(4,
-                               selectInput("comuSEMPred",
-                                           "Comuna:",
-                                           unique(as.character(datos$COMUNA))
-                               )
-                        ),
-                        column(4, 
-                               selectInput("anoSEMPred",
-                                           "Año:",
-                                           unique(as.character(datos$PERIODO))
-                               )
-                        ),
-                        column(4, 
-                               selectInput("semPred",
-                                           "Semana:",
-                                           unique(as.character(datos$semana))
-                               )
-                        )
-                      ),
-                      fluidRow(
-                        column(12, align="center",
-                               actionButton("showSem", "Predecir")
-                        )
-                      ),
-                      div(id='divtitD', align='center', h3('Predictor por Día')),
-                      fluidRow(
-                        column(4,
-                               selectInput("comuDIAPred",
-                                           "Comuna:",
-                                           unique(as.character(datos$COMUNA))
-                               )
-                        ),
-                        column(4, 
-                               selectInput("anoDIAPred",
-                                           "Año:",
-                                           unique(as.character(datos$PERIODO))
-                               )
-                        ),
-                        column(4, 
-                               selectInput("mesDIAPred",
-                                           "Mes:",
-                                           unique(as.character(datos$MES))
-                               )
-                        ),
-                        column(4, 
-                               selectInput("diaPred",
-                                           "Dia:",
-                                           unique(as.character(datos$DIA))
-                               )
-                        )
-                      ),
-                      fluidRow(
-                        column(12, align="center",
-                               actionButton("showDia", "Predecir")
-                        )
-                      )
              )
   )
   
@@ -194,7 +288,7 @@ server <- function(input, output, session) {
   
   output$columns <- renderUI({
     barrioos <- select(filter(datos, COMUNA == input$comu), BARRIO)
-    selectInput('barr', 'Barrios', c('All',barrioos))
+    selectInput('barr', 'Barrios:', c('All',barrioos))
   })
   
   output$table <- DT::renderDataTable(DT::datatable({
@@ -241,7 +335,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$showSem, {
-    comaPredMES <- subset(af1, COMUNA == input$comuSEMPred & PERIODO == input$anoSEMPred & semana == input$semPred)
+    comaPredMES <- subset(datos, COMUNA == input$comuSEMPred & PERIODO == input$anoSEMPred & semana == input$semPred)
     mmm <- cforest(N_ACC_SEMANA_COMUNA~DIA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
                    data = comaPredMES,
                    controls = cforest_unbiased(ntree = 100, mtry = 5))
@@ -260,7 +354,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$showDia, {
-    comaPredDIA <- subset(af1, COMUNA == input$comuDIAPred & PERIODO == input$anoDIAPred & MES == input$mesDIAPred)
+    comaPredDIA <- subset(datos, COMUNA == input$comuDIAPred & PERIODO == input$anoDIAPred & MES == input$mesDIAPred)
     mmm <- cforest(N_ACC_DIA_COMUNA~DIA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
                    data = comaPredDIA,
                    controls = cforest_unbiased(ntree = 100, mtry = 5))
@@ -279,7 +373,65 @@ server <- function(input, output, session) {
     )
   })
   
+  observeEvent(input$showMesBarrio, {
+    comaPredMesBarrio <- subset(datos, BARRIO == input$barrioMESPred  & PERIODO == input$anoMESPredBarrio & MES == input$mesPredBarrio)
+    
+    modeloBarrioMes <- cforest(N_ACC_MES_BARRIO~COMUNA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+            data = comaPredMesBarrio,
+            controls = cforest_unbiased(ntree = 150, mtry = 4))
+    
+    pMesBarrio <- predict(modeloBarrioMes, comaPredMesBarrio, OOB = TRUE,
+                 type = "response")
+    
+    predMesBarrio <- strtoi(pMesBarrio)
+    marco <- data.frame(Año = comaPredMesBarrio$PERIODO, Mes = comaPredMesBarrio$MES, Predicciones = predMesBarrio)
+    resMesBarrio <- unique(marco)
+    resMesBarrio <- resMesBarrio[!is.na(resMesBarrio$Predicciones),]
+    showModal(modalDialog(title = paste(paste(paste("Predicción para el año ", comaPredMesBarrio$PERIODO), " en el mes "), comaPredMesBarrio$MES), 
+                          paste("Número de accidentes: ", resMesBarrio$Predicciones),
+                          easyClose = TRUE
+    )
+    )
+  })
   
+  observeEvent(input$showSemBarrio, {
+    comaPredMES <- subset(datos, BARRIO == input$barrioSEMPred & PERIODO == input$anoSEMPredBarrio & semana == input$semPredBarrio)
+    mmm <- cforest(N_ACC_SEMANA_BARRIO~COMUNA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+                   data = comaPredMES,
+                   controls = cforest_unbiased(ntree = 100, mtry = 4))
+
+    pMES <- predict(mmm, comaPredMES, OOB = TRUE,
+                    type = "response")
+    predMES <- strtoi(pMES)
+    marcoMES <- data.frame(Año = comaPredMES$PERIODO, semana = comaPredMES$semana, Predicciones = predMES)
+    resMES <- unique(marcoMES)
+    resMES <- resMES[!is.na(resMES$Predicciones),]
+    showModal(modalDialog(title = paste(paste(paste("Predicción para la semana ", input$semPredBarrio), " del año "), input$anoSEMPredBarrio), 
+                          paste("Número de accidentes: ", resMES$Predicciones),
+                          easyClose = TRUE
+    )
+    )
+  })
+  
+  observeEvent(input$showDiaBarrio, {
+    comaPredDIA <- subset(datos, BARRIO == input$barrioDIAPred & PERIODO == input$anoDIAPredBarrio & MES == input$mesDIAPredBarrio)
+    mmm <- cforest(N_ACC_DIA_BARRIO~DIA+COMUNA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+                              data = comaPredDIA,
+                              controls = cforest_unbiased(ntree = 100, mtry = 4))
+    pDIA <- predict(mmm, comaPredDIA, OOB = TRUE,
+                    type = "response")
+    marcoDIA <- data.frame(Año = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = pDIA)
+    marcoDIA <- subset(marcoDIA, Dia == input$diaPred)
+    resDIA <- mean(marcoDIA$N_ACC_DIA_COMUNA)
+    if(is.nan(resDIA)){
+      resDIA<-"No ocurriran accidentes"
+    }
+    showModal(modalDialog(title = paste(paste(paste(paste(paste("Predicción para el día ", input$diaPredBarrio), " del mes "), input$mesDIAPredBarrio), "del año "), input$anoDIAPredBarrio), 
+                          paste("Número de accidentes: ", resDIA),
+                          easyClose = TRUE
+    )
+    )
+  })
 }
 
 
