@@ -1,7 +1,9 @@
 library(shiny)
 library(dplyr)
+library(rgdal)
 library(leaflet)
 library(party)
+library(plyr)
 library(lubridate)
 library(DT)
 
@@ -15,6 +17,15 @@ datos<-cbind(datos, semanas)
 comunas <- unique(datos$COMUNA)
 Sbarrios <- unique(select(datos, COMUNA, BARRIO))
 
+#Lectura del shapefile
+barrios_med = readOGR("./mapa_barrios_categoria/Barrios de Medellín/Barrio_Vereda.shp",layer="Barrio_Vereda")
+datos_barrios <- barrios_med@data
+names (datos_barrios)[3] = "BARRIO"
+datos_barrios$BARRIO <- iconv(barrios_med@data$NOMBRE,"UTF-8","ISO_8859-1")
+datos_barrios$BARRIO <- iconv(datos_barrios$BARRIO, to="ASCII//TRANSLIT")
+#Lectura de las categorias de agrupamiento
+barrios_categorias <- read.csv("./mapa_barrios_categoria/Categorias.csv", header = TRUE , sep = ";")
+barrios_categorias$BARRIO <- iconv(barrios_categorias$BARRIO, to="ASCII//TRANSLIT")
 
 #Interfaz grafica
 ui <- fluidPage(
@@ -97,7 +108,25 @@ ui <- fluidPage(
                                    )
                                  ),
                                  leafletOutput("mymap")
-                        )
+                        ),
+                        tabPanel("Agrupación",
+                                 # Sidebar to demonstrate various slider options ----
+                                 div(id='divtit', align='center', h3('Análisis de Agrupamiento')),
+                                 p('Se realiza un agrupamiento a nivel de barrios mostrando patrones de accidentalidad similares en un mapa
+                                   En este caso usamos la técnica de agrupamiento de K-MEDIAS utilizando los barrios como unidades de medida
+                                   y la cantidad de los diferentes tipos de accidentes como características.
+                                   Se determinó que el número de grupos adecuado es de 4. Para la caracterización de los grupos en materia de
+                                   accidentalidad tendremos las siguientes 4 categorías:',br(),
+                                   strong('- Barrios con índices de accidentalidad tienden a ser altos, pero no lo suficiente como para considerarlos muy peligrosos:'),
+                                   strong(span(' CATEGORIA MEDIA ALTA', style = "color:darkorange")),br(),
+                                   strong('- Barrios pertenecientes a esta categoría se caracterizan por ser lugares que se consideran muy peligrosos:'),
+                                   strong(span('CATEGORIA ALTA', style = "color:red")),br(),
+                                   strong('-Los barrios pertenecientes a esta categoría se caracterizan por ser lugares que se consideran tranquilos:'),
+                                   strong(span(' CATEGORIA BAJA', style = "color:green")),br(),
+                                   strong('- Barrios con índices de accidentalidad relativamente bajos, pero no tanto como para considerarlos bastante tranquilos:'),
+                                   strong(span('CATEGORIA MEDIA BAJA', style = "color:gold"))),
+                                 leafletOutput("mymapcategory")
+                        )                        
              ),
              tabPanel("Predicción",
                       
@@ -313,6 +342,21 @@ server <- function(input, output, session) {
     leaflet(coordenadas) %>% addTiles() %>% addMarkers(
       clusterOptions = markerClusterOptions()
     )
+  })
+  
+    output$mymapcategory <- renderLeaflet({
+    #Unión de los barrios con su categoria
+    datos_listos <- join(datos_barrios, barrios_categorias)
+    #Asignación de colores a la categoria
+    datos_listos$CATEGORIA <- gsub(1,"orange", datos_listos$CATEGORIA )
+    datos_listos$CATEGORIA <- gsub(2,"red", datos_listos$CATEGORIA )
+    datos_listos$CATEGORIA <- gsub(3,"green", datos_listos$CATEGORIA )
+    datos_listos$CATEGORIA <- gsub(4,"yellow", datos_listos$CATEGORIA )
+    barrios_med@data$NOMBRE <- iconv(barrios_med@data$NOMBRE, to="ASCII//TRANSLIT")
+    barrios_med@data <- datos_listos
+    m=leaflet(barrios_med) 
+    m=addTiles(m)
+    m=addPolygons(m,popup=barrios_med@data$BARRIO,color=barrios_med@data$CATEGORIA)
   })
   
   observeEvent(input$showMes, {
