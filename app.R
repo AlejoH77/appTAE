@@ -39,7 +39,7 @@ ui <- fluidPage(
   # Titulo App ----
   #titlePanel("Prediccion de accidentes"),
   
-  navbarPage(title=div(img(src="logo.jpg"), "Prediccion de accidentes"),
+  navbarPage(title=div(img(src="logo.png", style = "width: 80px;")),
              tabPanel("Home", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
                       withTags(
                         div(class="container center",
