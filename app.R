@@ -126,7 +126,7 @@ ui <- fluidPage(
                                  ),
                                  leafletOutput("mymap")
                         ),
-                        tabPanel("Agrupación", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
+                        tabPanel("Agrupación",
                                  # Sidebar to demonstrate various slider options ----
                                  div(id='divtit', align='center', h3('Análisis de Agrupamiento')),
                                  p('Se realiza un agrupamiento a nivel de barrios mostrando patrones de accidentalidad similares en un mapa
@@ -134,13 +134,13 @@ ui <- fluidPage(
                                    y la cantidad de los diferentes tipos de accidentes como características.
                                    Se determinó que el número de grupos adecuado es de 4. Para la caracterización de los grupos en materia de
                                    accidentalidad tendremos las siguientes 4 categorías:',br(),
-                                   strong('- Barrios con índices de accidentalidad tienden a ser altos, pero no lo suficiente como para considerarlos muy peligrosos:'),
+                                   strong('-Son barrios con índices de accidentalidad que tienden a ser altos, pero no lo suficiente como para considerarlos muy peligrosos, serán barrios coloreados con naranjado: '),
                                    strong(span(' CATEGORIA MEDIA ALTA', style = "color:darkorange")),br(),
-                                   strong('- Barrios pertenecientes a esta categoría se caracterizan por ser lugares que se consideran muy peligrosos:'),
+                                   strong('-Los barrios pertenecientes a esta categoría se caracterizan por ser lugares que se consideran muy peligrosos, aquí, los promedios de accidentalidad son los mas altos en cada una de las clases y serán vistos de color rojo: '),
                                    strong(span('CATEGORIA ALTA', style = "color:red")),br(),
-                                   strong('-Los barrios pertenecientes a esta categoría se caracterizan por ser lugares que se consideran tranquilos:'),
+                                   strong('-Los barrios pertenecientes a esta categoría se caracterizan por ser lugares que se consideran tranquilos. Los promedios de accidentalidad son los mejores, es decir, los más bajos y se identificarán con el color verde: '),
                                    strong(span(' CATEGORIA BAJA', style = "color:green")),br(),
-                                   strong('- Barrios con índices de accidentalidad relativamente bajos, pero no tanto como para considerarlos bastante tranquilos:'),
+                                   strong('-Son barrios con índices de accidentalidad relativamente bajos, pero no tanto como para considerarlos bastante tranquilos, estos barrios serán identificados con color amarillo: '),
                                    strong(span('CATEGORIA MEDIA BAJA', style = "color:gold"))),
                                  leafletOutput("mymapcategory")
                         )                        
