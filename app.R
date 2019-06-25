@@ -37,28 +37,42 @@ ui <- fluidPage(
   #titlePanel("Prediccion de accidentes"),
   
   navbarPage("Prediccion de accidentes",
-             tabPanel("Home", 
+             tabPanel("Home", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
                       withTags(
                         div(class="container center",
-                            h1("Bienvenidos", align="center", style = "font-family: 'Lobster', 
-                            cursive; font-size:4;font-weight: 1000; line-height: 1.1; color: #000000;"),
+                            h1("Accident Factory", align="center", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;  font-size:4;font-weight: 1000; color:darkorange;"),
                             div(class="row",
                                 div(class="col-md-10  col-md-offset-1 videoWrapper",
-                                    iframe(src = "https://www.youtube.com/embed/G1-HDDDK87M", height="50%", width="100%")
+                                    iframe(src = "https://www.youtube.com/embed/G1-HDDDK87M", height="40%", width="80%")
                                 )
                             )
                         )
                       ),
-                      div(id='divinf', align='center', style = "font-family: 'Lobster', 
-                          cursive; font-size:4;font-weight: 1000; line-height: 2; color: #000000;", 
-                          h3('Este sitio contiene ---------------------'))
-                      #div(id='footer', align='center', h3('Tecnicas de aprendizaje estadístico'), br(),
-                      #   h4('Realizado por: '),'Alex Contreras, Alexis Valencia, Alejandro Herrera, Mateo Ochoa,
-                      #  Lucas Muños, Santiago Cadavid')
+                      fluidRow(
+                        column(2,
+                               p('')
+                        ),
+                        column(8, 
+                               p('La accidentalidad es un problema que se presenta en todas la ciudades del mundo, y poder reducirla
+                               es un problema que se ha venido tratando desde distintos ángulos y perspectivas, teniendo en cuenta 
+                               que esta es una variable que esta dependiendo de muchos factores y posiblemente muchos de ellos imposibles de controlar. 
+                               Así, nuestro trabajo al calcular y conocer el número de accidentes por comuna y barrio en la ciudad de Medellín 
+                               en un período de tiempo determinado (diario, semanal y mensual) puede ser de gran ayuda para conocer los 
+                               puntos más críticos de accidentalidad en la ciudad y evitarlos encontrando caminos alternos donde podamos 
+                               viajar con más tranquilidad, ayudándonos adicionalmente del análisis de agrupamiento realizado donde se 
+                               conocen los barrios con mayor similitud en cuanto a accidentalidad.', style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;  font-size: 2em; text-align: justify;" )
+                        ),
+                        column(2,
+                               p('')
+                        )
+                      ),
+                      div(id='footer', align='center', style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;  font-size: 2em; text-align: justify;",
+                         h4('Realizado por: ', style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;font-size: 2em; text-align: justify;"),'Alex Contreras, Alexis Valencia, Alejandro Herrera, Mateo Ochoa,
+                        Lucas Muñoz, Santiago Cadavid', hr())
                       
              ),
              navbarMenu('Historico',
-                        tabPanel("Todos los datos",
+                        tabPanel("Todos los datos", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
                                  fluidRow(
                                    column(4,
                                           dateRangeInput("dates", "Rango de fechas",
@@ -83,7 +97,7 @@ ui <- fluidPage(
                                  
                                  DT::dataTableOutput('table')
                         ),
-                        tabPanel("Mapa",
+                        tabPanel("Mapa", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
                                  # Sidebar to demonstrate various slider options ----
                                  div(id='divtit', align='center', h3('Historico por zonas')),
                                  p('En este mapa interactivo usted podrá visualizar el numero de accidentes por zonas acorde a una
@@ -109,7 +123,7 @@ ui <- fluidPage(
                                  ),
                                  leafletOutput("mymap")
                         ),
-                        tabPanel("Agrupación",
+                        tabPanel("Agrupación", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
                                  # Sidebar to demonstrate various slider options ----
                                  div(id='divtit', align='center', h3('Análisis de Agrupamiento')),
                                  p('Se realiza un agrupamiento a nivel de barrios mostrando patrones de accidentalidad similares en un mapa
@@ -128,7 +142,7 @@ ui <- fluidPage(
                                  leafletOutput("mymapcategory")
                         )                        
              ),
-             tabPanel("Predicción",
+             tabPanel("Predicción", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
                       
                       fluidRow(
                         column(6,
