@@ -418,56 +418,60 @@ server <- function(input, output, session) {
   })
   
   observeEvent(input$showMesBarrio, {
-    comaPredMesBarrio <- subset(datos, BARRIO == input$barrioMESPred  & PERIODO == input$anoMESPredBarrio & MES == input$mesPredBarrio)
+    comaPredMesBarrio <- subset(datos, BARRIO == input$barrioMESPred)
     
     modeloBarrioMes <- cforest(N_ACC_MES_BARRIO~COMUNA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
-            data = comaPredMesBarrio,
-            controls = cforest_unbiased(ntree = 150, mtry = 4))
+                               data = comaPredMesBarrio,
+                               controls = cforest_unbiased(ntree = 150, mtry = 4))
     
     pMesBarrio <- predict(modeloBarrioMes, comaPredMesBarrio, OOB = TRUE,
-                 type = "response")
+                          type = "response")
     
-    predMesBarrio <- strtoi(pMesBarrio)
-    marco <- data.frame(Año = comaPredMesBarrio$PERIODO, Mes = comaPredMesBarrio$MES, Predicciones = predMesBarrio)
-    resMesBarrio <- unique(marco)
-    resMesBarrio <- resMesBarrio[!is.na(resMesBarrio$Predicciones),]
+    marco <- data.frame(Año = comaPredMesBarrio$PERIODO, Mes = comaPredMesBarrio$MES, Predicciones = pMesBarrio)
+    marco <- subset(marco, Año == input$anoMESPredBarrio & Mes == input$mesPredBarrio)
+    resMesBarrio <- mean(marco$N_ACC_MES_BARRIO)
+    if(is.na(resMesBarrio)){
+      resMesBarrio<-"No ocurriran accidentes"
+    }
     showModal(modalDialog(title = paste(paste(paste("Predicción para el año ", comaPredMesBarrio$PERIODO), " en el mes "), comaPredMesBarrio$MES), 
-                          paste("Número de accidentes: ", resMesBarrio$Predicciones),
+                          paste("Número de accidentes: ", resMesBarrio),
                           easyClose = TRUE
     )
     )
   })
   
   observeEvent(input$showSemBarrio, {
-    comaPredMES <- subset(datos, BARRIO == input$barrioSEMPred & PERIODO == input$anoSEMPredBarrio & semana == input$semPredBarrio)
+    comaPredMES <- subset(datos, BARRIO == input$barrioSEMPred)
     mmm <- cforest(N_ACC_SEMANA_BARRIO~COMUNA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
                    data = comaPredMES,
                    controls = cforest_unbiased(ntree = 100, mtry = 4))
-
+    
     pMES <- predict(mmm, comaPredMES, OOB = TRUE,
                     type = "response")
-    predMES <- strtoi(pMES)
-    marcoMES <- data.frame(Año = comaPredMES$PERIODO, semana = comaPredMES$semana, Predicciones = predMES)
-    resMES <- unique(marcoMES)
-    resMES <- resMES[!is.na(resMES$Predicciones),]
+    marcoMES <- data.frame(Año = comaPredMES$PERIODO, semana = comaPredMES$semana, Predicciones = pMES)
+    marcoMES <- subset(marcoMES, Año == input$anoSEMPredBarrio & semana == input$semPredBarrio)
+    resMES <- mean(marcoMES$N_ACC_SEMANA_BARRIO)
+    if(is.na(resMES)){
+      resMES<-"No ocurriran accidentes"
+    }
     showModal(modalDialog(title = paste(paste(paste("Predicción para la semana ", input$semPredBarrio), " del año "), input$anoSEMPredBarrio), 
-                          paste("Número de accidentes: ", resMES$Predicciones),
+                          paste("Número de accidentes: ", resMES),
                           easyClose = TRUE
     )
     )
   })
   
   observeEvent(input$showDiaBarrio, {
-    comaPredDIA <- subset(datos, BARRIO == input$barrioDIAPred & PERIODO == input$anoDIAPredBarrio & MES == input$mesDIAPredBarrio)
+    comaPredDIA <- subset(datos, BARRIO == input$barrioDIAPred)
     mmm <- cforest(N_ACC_DIA_BARRIO~DIA+COMUNA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
-                              data = comaPredDIA,
-                              controls = cforest_unbiased(ntree = 100, mtry = 4))
+                   data = comaPredDIA,
+                   controls = cforest_unbiased(ntree = 100, mtry = 4))
     pDIA <- predict(mmm, comaPredDIA, OOB = TRUE,
                     type = "response")
     marcoDIA <- data.frame(Año = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = pDIA)
-    marcoDIA <- subset(marcoDIA, Dia == input$diaPred)
+    marcoDIA <- subset(marcoDIA, Año == input$anoDIAPredBarrio & Mes == input$mesDIAPredBarrio & Dia == input$diaPred)
     resDIA <- mean(marcoDIA$N_ACC_DIA_COMUNA)
-    if(is.nan(resDIA)){
+    if(is.na(resDIA)){
       resDIA<-"No ocurriran accidentes"
     }
     showModal(modalDialog(title = paste(paste(paste(paste(paste("Predicción para el día ", input$diaPredBarrio), " del mes "), input$mesDIAPredBarrio), "del año "), input$anoDIAPredBarrio), 
