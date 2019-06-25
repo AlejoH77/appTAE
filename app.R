@@ -164,7 +164,7 @@ ui <- fluidPage(
                                  column(4, 
                                         selectInput("mesPred",
                                                     "Mes:",
-                                                    unique(as.character(datos$MES))
+                                                    1:12
                                         )
                                  )
                                ),
@@ -190,7 +190,7 @@ ui <- fluidPage(
                                  column(4, 
                                         selectInput("semPred",
                                                     "Semana:",
-                                                    unique(as.character(datos$semana))
+                                                    1:50
                                         )
                                  )
                                ),
@@ -216,13 +216,13 @@ ui <- fluidPage(
                                  column(3, 
                                         selectInput("mesDIAPred",
                                                     "Mes:",
-                                                    unique(as.character(datos$MES))
+                                                    1:12
                                         )
                                  ),
                                  column(3, 
                                         selectInput("diaPred",
                                                     "Dia:",
-                                                    unique(as.character(datos$DIA))
+                                                    1:31
                                         )
                                  )
                                ),
@@ -251,7 +251,7 @@ ui <- fluidPage(
                                  column(4, 
                                         selectInput("mesPredBarrio",
                                                     "Mes:",
-                                                    unique(as.character(datos$MES))
+                                                    1:12
                                         )
                                  )
                                ),
@@ -277,7 +277,7 @@ ui <- fluidPage(
                                  column(4, 
                                         selectInput("semPredBarrio",
                                                     "Semana:",
-                                                    unique(as.character(datos$semana))
+                                                    1:50
                                         )
                                  )
                                ),
@@ -303,13 +303,13 @@ ui <- fluidPage(
                                  column(3, 
                                         selectInput("mesDIAPredBarrio",
                                                     "Mes:",
-                                                    unique(as.character(datos$MES))
+                                                    1:12
                                         )
                                  ),
                                  column(3, 
                                         selectInput("diaPredBarrio",
                                                     "Dia:",
-                                                    unique(as.character(datos$DIA))
+                                                    1:31
                                         )
                                  )
                                ),
