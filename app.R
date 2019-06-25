@@ -27,6 +27,9 @@ datos_barrios$BARRIO <- iconv(datos_barrios$BARRIO, to="ASCII//TRANSLIT")
 barrios_categorias <- read.csv("./mapa_barrios_categoria/Categorias.csv", header = TRUE , sep = ";")
 barrios_categorias$BARRIO <- iconv(barrios_categorias$BARRIO, to="ASCII//TRANSLIT")
 
+#Unión de los barrios con su categoria
+datos_listos <- join(datos_barrios, barrios_categorias)
+
 #Interfaz grafica
 ui <- fluidPage(
   
@@ -359,8 +362,7 @@ server <- function(input, output, session) {
   })
   
     output$mymapcategory <- renderLeaflet({
-    #Unión de los barrios con su categoria
-    datos_listos <- join(datos_barrios, barrios_categorias)
+
     #Asignación de colores a la categoria
     datos_listos$CATEGORIA <- gsub(1,"orange", datos_listos$CATEGORIA )
     datos_listos$CATEGORIA <- gsub(2,"red", datos_listos$CATEGORIA )
