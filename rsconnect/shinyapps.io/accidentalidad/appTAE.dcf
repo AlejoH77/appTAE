@@ -5,8 +5,8 @@ account: accidentalidad
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 996748
-bundleId: 2176936
+bundleId: 2177940
 url: https://accidentalidad.shinyapps.io/apptae/
-when: 1561466999.92677
+when: 1561489851.89601
 asMultiple: FALSE
 asStatic: FALSE

@@ -18,13 +18,13 @@ comunas <- unique(datos$COMUNA)
 Sbarrios <- unique(select(datos, COMUNA, BARRIO))
 
 #Lectura del shapefile
-barrios_med = readOGR("./mapa_barrios_categoria/Barrios de Medellín/Barrio_Vereda.shp",layer="Barrio_Vereda")
+barrios_med = readOGR("mapa_barrios_categoria/barriosMedellin/Barrio_Vereda.shp",layer="Barrio_Vereda")
 datos_barrios <- barrios_med@data
 names (datos_barrios)[3] = "BARRIO"
 datos_barrios$BARRIO <- iconv(barrios_med@data$NOMBRE,"UTF-8","ISO_8859-1")
 datos_barrios$BARRIO <- iconv(datos_barrios$BARRIO, to="ASCII//TRANSLIT")
 #Lectura de las categorias de agrupamiento
-barrios_categorias <- read.csv("./mapa_barrios_categoria/Categorias.csv", header = TRUE , sep = ";")
+barrios_categorias <- read.csv("mapa_barrios_categoria/Categorias.csv", header = TRUE , sep = ";")
 barrios_categorias$BARRIO <- iconv(barrios_categorias$BARRIO, to="ASCII//TRANSLIT")
 
 #Unión de los barrios con su categoria
