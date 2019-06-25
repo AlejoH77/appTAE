@@ -424,6 +424,9 @@ server <- function(input, output, session) {
     if(is.nan(resDIA)){
       resDIA<-"No ocurriran accidentes"
     }
+    else{
+      resDIA <- round(resDIA)
+    }
     showModal(modalDialog(title = paste(paste(paste(paste(paste("Predicción para el día ", input$diaPred), " del mes "), input$mesDIAPred), "del año "), input$anoDIAPred), 
                           paste("Número de accidentes: ", resDIA),
                           easyClose = TRUE
@@ -447,6 +450,9 @@ server <- function(input, output, session) {
     if(is.na(resMesBarrio)){
       resMesBarrio<-"No ocurriran accidentes"
     }
+    else{
+      resMesBarrio <- round(resMesBarrio)
+    }
     showModal(modalDialog(title = paste(paste(paste("Predicción para el año ", comaPredMesBarrio$PERIODO), " en el mes "), comaPredMesBarrio$MES), 
                           paste("Número de accidentes: ", resMesBarrio),
                           easyClose = TRUE
@@ -468,6 +474,9 @@ server <- function(input, output, session) {
     if(is.na(resMES)){
       resMES<-"No ocurriran accidentes"
     }
+    else{
+      resMES <- round(resMES)
+    }
     showModal(modalDialog(title = paste(paste(paste("Predicción para la semana ", input$semPredBarrio), " del año "), input$anoSEMPredBarrio), 
                           paste("Número de accidentes: ", resMES),
                           easyClose = TRUE
@@ -487,6 +496,9 @@ server <- function(input, output, session) {
     resDIA <- mean(marcoDIA$N_ACC_DIA_COMUNA)
     if(is.na(resDIA)){
       resDIA<-"No ocurriran accidentes"
+    }
+    else{
+      resDIA <- round(resDIA)
     }
     showModal(modalDialog(title = paste(paste(paste(paste(paste("Predicción para el día ", input$diaPredBarrio), " del mes "), input$mesDIAPredBarrio), "del año "), input$anoDIAPredBarrio), 
                           paste("Número de accidentes: ", resDIA),
