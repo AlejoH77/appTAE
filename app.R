@@ -70,7 +70,7 @@ ui <- fluidPage(
                         )
                       ),
                       div(id='footer', align='center', style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;  font-size: 2em; text-align: justify;",
-                         h4('Realizado por: ', style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;font-size: 2em; text-align: justify;"),'Alex Contreras, Alexis Valencia, Alejandro Herrera, Mateo Ochoa,
+                          h4('Realizado por: ', style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;font-size: 2em; text-align: justify;"),'Alex Contreras, Alexis Valencia, Alejandro Herrera, Mateo Ochoa,
                         Lucas Muñoz, Santiago Cadavid', hr())
                       
              ),
@@ -103,7 +103,7 @@ ui <- fluidPage(
                         tabPanel("Mapa", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
                                  # Sidebar to demonstrate various slider options ----
                                  div(id='divtit', align='center', h3('Historico por zonas')),
-                                 p('En este mapa interactivo usted podrá visualizar el numero de accidentes por zonas acorde a una
+                                 p('En este mapa interactivo usted podrá visualizar el número de accidentes por zonas acorde a una
                                  ventana de tiempo definida; las zonas irán cambiando de acuerdo al zoom que se realice en el 
                                  mapa. Cada zona se representa con un círculo que tiene un color y un número asociado.',
                                    strong('El número expresa cuántos accidentes han ocurrido '), 'y el color expresa
@@ -234,7 +234,7 @@ ui <- fluidPage(
                                         actionButton("showDia", "Predecir")
                                  )
                                )
-                               ),
+                        ),
                         column(6,
                                div(id='divtitM', align='center', h2('Predicción por barrio')),
                                div(id='divtitM', align='center', h3('Predictor por Mes')),
@@ -321,9 +321,9 @@ ui <- fluidPage(
                                         actionButton("showDiaBarrio", "Predecir")
                                  )
                                )
-                              )
-                        
                         )
+                        
+                      )
              )
   )
   
@@ -361,8 +361,8 @@ server <- function(input, output, session) {
     )
   })
   
-    output$mymapcategory <- renderLeaflet({
-
+  output$mymapcategory <- renderLeaflet({
+    
     #Asignación de colores a la categoria
     datos_listos$CATEGORIA <- gsub(1,"orange", datos_listos$CATEGORIA )
     datos_listos$CATEGORIA <- gsub(2,"red", datos_listos$CATEGORIA )
