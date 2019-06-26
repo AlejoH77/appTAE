@@ -46,7 +46,7 @@ ui <- fluidPage(
                             h1("Accident Factory", align="center", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;  font-size:4;font-weight: 1000; color:darkorange;"),
                             div(class="row",
                                 div(class="col-md-10  col-md-offset-1 videoWrapper",
-                                    iframe(src = "https://www.youtube.com/embed/G1-HDDDK87M", height="40%", width="80%")
+                                    iframe(src = "https://www.youtube.com/embed/LOZkDdE8jr0", height="40%", width="80%")
                                 )
                             )
                         )
