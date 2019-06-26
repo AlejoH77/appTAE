@@ -31,16 +31,10 @@ barrios_categorias$BARRIO <- iconv(barrios_categorias$BARRIO, to="ASCII//TRANSLI
 datos_listos <- join(datos_barrios, barrios_categorias)
 
 #Interfaz grafica
-ui <- fluidPage(
-  
-  #css
+ui <- fluidPage(title = "Accident Factory",
   theme = "estilos.css",
-  
-  # Titulo App ----
-  #titlePanel("Prediccion de accidentes"),
-  
   navbarPage(title=div(img(src="logo.png", style = "width: 80px;")),
-             tabPanel("Home", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
+             tabPanel("Principal", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
                       withTags(
                         div(class="container center",
                             h1("Accident Factory", align="center", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;  font-size:4;font-weight: 1000; color:darkorange;"),
@@ -71,7 +65,7 @@ ui <- fluidPage(
                       ),
                       div(id='footer', align='center', style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;  font-size: 2em; text-align: justify;",
                           h4('Realizado por: ', style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;font-size: 2em; text-align: justify;"),'Alex Contreras, Alexis Valencia, Alejandro Herrera, Mateo Ochoa,
-                        Lucas Muñoz, Santiago Cadavid', hr())
+                        Lucas Munoz, Santiago Cadavid', hr())
                       
              ),
              navbarMenu('Historico',
@@ -160,7 +154,7 @@ ui <- fluidPage(
                                  ),
                                  column(4, 
                                         selectInput("anoMESPred",
-                                                    "Año:",
+                                                    "Anio:",
                                                     unique(as.character(datos$PERIODO))
                                         )
                                  ),
@@ -186,7 +180,7 @@ ui <- fluidPage(
                                  ),
                                  column(4, 
                                         selectInput("anoSEMPred",
-                                                    "Año:",
+                                                    "Anio:",
                                                     unique(as.character(datos$PERIODO))
                                         )
                                  ),
@@ -212,7 +206,7 @@ ui <- fluidPage(
                                  ),
                                  column(3, 
                                         selectInput("anoDIAPred",
-                                                    "Año:",
+                                                    "Anio:",
                                                     unique(as.character(datos$PERIODO))
                                         )
                                  ),
@@ -247,7 +241,7 @@ ui <- fluidPage(
                                  ),
                                  column(4, 
                                         selectInput("anoMESPredBarrio",
-                                                    "Año:",
+                                                    "Anio:",
                                                     unique(as.character(datos$PERIODO))
                                         )
                                  ),
@@ -273,7 +267,7 @@ ui <- fluidPage(
                                  ),
                                  column(4, 
                                         selectInput("anoSEMPredBarrio",
-                                                    "Año:",
+                                                    "Anio:",
                                                     unique(as.character(datos$PERIODO))
                                         )
                                  ),
@@ -299,7 +293,7 @@ ui <- fluidPage(
                                  ),
                                  column(3, 
                                         selectInput("anoDIAPredBarrio",
-                                                    "Año:",
+                                                    "Anio:",
                                                     unique(as.character(datos$PERIODO))
                                         )
                                  ),
@@ -325,8 +319,7 @@ ui <- fluidPage(
                         
                       )
              )
-  )
-  
+      )
 )
 
 #logica de la app
@@ -384,10 +377,10 @@ server <- function(input, output, session) {
     p <- predict(m19, comaPred, OOB = TRUE,
                  type = "response")
     pred <- strtoi(p)
-    marco <- data.frame(Año = comaPred$PERIODO, Mes = comaPred$MES, Predicciones = pred)
+    marco <- data.frame(Anio = comaPred$PERIODO, Mes = comaPred$MES, Predicciones = pred)
     res <- unique(marco)
     res <- res[!is.na(res$Predicciones),]
-    showModal(modalDialog(title = paste(paste(paste("Predicción para el año ", comaPred$PERIODO), " en el mes "), comaPred$MES), 
+    showModal(modalDialog(title = paste(paste(paste("Predicción para el anio ", comaPred$PERIODO), " en el mes "), comaPred$MES), 
                           paste("Número de accidentes: ", res$Predicciones),
                           easyClose = TRUE
     )
@@ -403,10 +396,10 @@ server <- function(input, output, session) {
     pMES <- predict(mmm, comaPredMES, OOB = TRUE,
                     type = "response")
     predMES <- strtoi(pMES)
-    marcoMES <- data.frame(Año = comaPredMES$PERIODO, semana = comaPredMES$semana, Predicciones = predMES)
+    marcoMES <- data.frame(Anio = comaPredMES$PERIODO, semana = comaPredMES$semana, Predicciones = predMES)
     resMES <- unique(marcoMES)
     resMES <- resMES[!is.na(resMES$Predicciones),]
-    showModal(modalDialog(title = paste(paste(paste("Predicción para la semana ", input$semPred), " del año "), input$anoSEMPred), 
+    showModal(modalDialog(title = paste(paste(paste("Predicción para la semana ", input$semPred), " del anio "), input$anoSEMPred), 
                           paste("Número de accidentes: ", resMES$Predicciones),
                           easyClose = TRUE
     )
@@ -420,7 +413,7 @@ server <- function(input, output, session) {
                    controls = cforest_unbiased(ntree = 100, mtry = 5))
     pDIA <- predict(mmm, comaPredDIA, OOB = TRUE,
                     type = "response")
-    marcoDIA <- data.frame(Año = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = pDIA)
+    marcoDIA <- data.frame(Anio = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = pDIA)
     marcoDIA <- subset(marcoDIA, Dia == input$diaPred)
     resDIA <- mean(marcoDIA$N_ACC_DIA_COMUNA)
     if(is.nan(resDIA)){
@@ -429,7 +422,7 @@ server <- function(input, output, session) {
     else{
       resDIA <- round(resDIA)
     }
-    showModal(modalDialog(title = paste(paste(paste(paste(paste("Predicción para el día ", input$diaPred), " del mes "), input$mesDIAPred), "del año "), input$anoDIAPred), 
+    showModal(modalDialog(title = paste(paste(paste(paste(paste("Predicción para el día ", input$diaPred), " del mes "), input$mesDIAPred), "del anio "), input$anoDIAPred), 
                           paste("Número de accidentes: ", resDIA),
                           easyClose = TRUE
     )
@@ -446,8 +439,8 @@ server <- function(input, output, session) {
     pMesBarrio <- predict(modeloBarrioMes, comaPredMesBarrio, OOB = TRUE,
                           type = "response")
     
-    marco <- data.frame(Año = comaPredMesBarrio$PERIODO, Mes = comaPredMesBarrio$MES, Predicciones = pMesBarrio)
-    marco <- subset(marco, Año == input$anoMESPredBarrio & Mes == input$mesPredBarrio)
+    marco <- data.frame(Anio = comaPredMesBarrio$PERIODO, Mes = comaPredMesBarrio$MES, Predicciones = pMesBarrio)
+    marco <- subset(marco, Anio == input$anoMESPredBarrio & Mes == input$mesPredBarrio)
     resMesBarrio <- mean(marco$N_ACC_MES_BARRIO)
     if(is.na(resMesBarrio)){
       resMesBarrio<-"No ocurriran accidentes"
@@ -455,7 +448,7 @@ server <- function(input, output, session) {
     else{
       resMesBarrio <- round(resMesBarrio)
     }
-    showModal(modalDialog(title = paste(paste(paste("Predicción para el año ", comaPredMesBarrio$PERIODO), " en el mes "), comaPredMesBarrio$MES), 
+    showModal(modalDialog(title = paste(paste(paste("Predicción para el anio ", comaPredMesBarrio$PERIODO), " en el mes "), comaPredMesBarrio$MES), 
                           paste("Número de accidentes: ", resMesBarrio),
                           easyClose = TRUE
     )
@@ -470,8 +463,8 @@ server <- function(input, output, session) {
     
     pMES <- predict(mmm, comaPredMES, OOB = TRUE,
                     type = "response")
-    marcoMES <- data.frame(Año = comaPredMES$PERIODO, semana = comaPredMES$semana, Predicciones = pMES)
-    marcoMES <- subset(marcoMES, Año == input$anoSEMPredBarrio & semana == input$semPredBarrio)
+    marcoMES <- data.frame(Anio = comaPredMES$PERIODO, semana = comaPredMES$semana, Predicciones = pMES)
+    marcoMES <- subset(marcoMES, Anio == input$anoSEMPredBarrio & semana == input$semPredBarrio)
     resMES <- mean(marcoMES$N_ACC_SEMANA_BARRIO)
     if(is.na(resMES)){
       resMES<-"No ocurriran accidentes"
@@ -479,7 +472,7 @@ server <- function(input, output, session) {
     else{
       resMES <- round(resMES)
     }
-    showModal(modalDialog(title = paste(paste(paste("Predicción para la semana ", input$semPredBarrio), " del año "), input$anoSEMPredBarrio), 
+    showModal(modalDialog(title = paste(paste(paste("Predicción para la semana ", input$semPredBarrio), " del anio "), input$anoSEMPredBarrio), 
                           paste("Número de accidentes: ", resMES),
                           easyClose = TRUE
     )
@@ -493,8 +486,8 @@ server <- function(input, output, session) {
                    controls = cforest_unbiased(ntree = 100, mtry = 4))
     pDIA <- predict(mmm, comaPredDIA, OOB = TRUE,
                     type = "response")
-    marcoDIA <- data.frame(Año = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = pDIA)
-    marcoDIA <- subset(marcoDIA, Año == input$anoDIAPredBarrio & Mes == input$mesDIAPredBarrio & Dia == input$diaPred)
+    marcoDIA <- data.frame(Anio = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = pDIA)
+    marcoDIA <- subset(marcoDIA, Anio == input$anoDIAPredBarrio & Mes == input$mesDIAPredBarrio & Dia == input$diaPred)
     resDIA <- mean(marcoDIA$N_ACC_DIA_COMUNA)
     if(is.na(resDIA)){
       resDIA<-"No ocurriran accidentes"
@@ -502,7 +495,7 @@ server <- function(input, output, session) {
     else{
       resDIA <- round(resDIA)
     }
-    showModal(modalDialog(title = paste(paste(paste(paste(paste("Predicción para el día ", input$diaPredBarrio), " del mes "), input$mesDIAPredBarrio), "del año "), input$anoDIAPredBarrio), 
+    showModal(modalDialog(title = paste(paste(paste(paste(paste("Predicción para el día ", input$diaPredBarrio), " del mes "), input$mesDIAPredBarrio), "del anio "), input$anoDIAPredBarrio), 
                           paste("Número de accidentes: ", resDIA),
                           easyClose = TRUE
     )
