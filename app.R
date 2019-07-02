@@ -139,185 +139,76 @@ ui <- fluidPage(title = "Accident Factory",
                                  leafletOutput("mymapcategory")
                         )                        
              ),
-             tabPanel("Predicción", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
-                      
-                      fluidRow(
-                        column(6,
-                               div(id='divtitM', align='center', h2('Predicción por comuna')),
-                               div(id='divtitM', align='center', h3('Predictor por Mes')),
-                               fluidRow(
-                                 column(4,
-                                        selectInput("comuMESPred",
-                                                    "Comuna:",
-                                                    unique(as.character(datos$COMUNA))
-                                        )
-                                 ),
-                                 column(4, 
-                                        selectInput("anoMESPred",
-                                                    "Anio:",
-                                                    unique(as.character(datos$PERIODO))
-                                        )
-                                 ),
-                                 column(4, 
-                                        selectInput("mesPred",
-                                                    "Mes:",
-                                                    1:12
-                                        )
-                                 )
-                               ),
-                               fluidRow(
-                                 column(12, align="center",
-                                        actionButton("showMes", "Predecir")
-                                 )
-                               ),
-                               div(id='divtitS', align='center', h3('Predictor por Semana')),
-                               fluidRow(
-                                 column(4,
-                                        selectInput("comuSEMPred",
-                                                    "Comuna:",
-                                                    unique(as.character(datos$COMUNA))
-                                        )
-                                 ),
-                                 column(4, 
-                                        selectInput("anoSEMPred",
-                                                    "Anio:",
-                                                    unique(as.character(datos$PERIODO))
-                                        )
-                                 ),
-                                 column(4, 
-                                        selectInput("semPred",
-                                                    "Semana:",
-                                                    1:50
-                                        )
-                                 )
-                               ),
-                               fluidRow(
-                                 column(12, align="center",
-                                        actionButton("showSem", "Predecir")
-                                 )
-                               ),
-                               div(id='divtitD', align='center', h3('Predictor por Día')),
-                               fluidRow(
-                                 column(3,
-                                        selectInput("comuDIAPred",
-                                                    "Comuna:",
-                                                    unique(as.character(datos$COMUNA))
-                                        )
-                                 ),
-                                 column(3, 
-                                        selectInput("anoDIAPred",
-                                                    "Anio:",
-                                                    unique(as.character(datos$PERIODO))
-                                        )
-                                 ),
-                                 column(3, 
-                                        selectInput("mesDIAPred",
-                                                    "Mes:",
-                                                    1:12
-                                        )
-                                 ),
-                                 column(3, 
-                                        selectInput("diaPred",
-                                                    "Dia:",
-                                                    1:31
-                                        )
-                                 )
-                               ),
-                               fluidRow(
-                                 column(12, align="center",
-                                        actionButton("showDia", "Predecir")
-                                 )
-                               )
+             navbarMenu('Prediccion',
+                        tabPanel("Por Comuna", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
+                                 
+                                  div(id='divtitM', align='center', h2('PredicciÃ³n por comuna')),
+                                  fluidRow(
+                                    column(4,
+                                           dateRangeInput("PredComdates", "Ventana de tiempo",
+                                                          start = "2014-01-01",
+                                                          end = "2014-12-01",
+                                                          min = "2014-01-01",
+                                                          max = "2018-12-31",
+                                                          separator = " - ")
+                                    ),
+                                    column(4, 
+                                           selectInput("comuPred",
+                                                       "Comuna:",
+                                                       unique(as.character(datos$COMUNA))
+                                           )
+                                    ),
+                                    column(4, 
+                                           selectInput("escala",
+                                                       "Escala:",
+                                                       c("Mes", "Semana", "Dia")
+                                           )
+                                    )
+                                  ),
+                                  fluidRow(
+                                    column(12, align="center",
+                                           actionButton("predecirCom", "Predecir")
+                                    )
+                                  ),
+                                 DT::dataTableOutput('tablePredCom'),
+                                 div(id='NotaBarr', align='center', strong('Importante: '),p('Los dias faltantes en la prediccion cuando se seleccione la escala "Dia"
+                                                                      son los dias en los que no ocurren accidentes', style = "color:red"))
+                                 
                         ),
-                        column(6,
-                               div(id='divtitM', align='center', h2('Predicción por barrio')),
-                               div(id='divtitM', align='center', h3('Predictor por Mes')),
-                               fluidRow(
-                                 column(4,
-                                        selectInput("barrioMESPred",
-                                                    "Barrio:",
-                                                    unique(as.character(datos$BARRIO))
-                                        ) 
-                                 ),
-                                 column(4, 
-                                        selectInput("anoMESPredBarrio",
-                                                    "Anio:",
-                                                    unique(as.character(datos$PERIODO))
-                                        )
-                                 ),
-                                 column(4, 
-                                        selectInput("mesPredBarrio",
-                                                    "Mes:",
-                                                    1:12
-                                        )
+                        tabPanel("Por Barrio", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; ",
+
+                                       div(id='divtitM', align='center', h2('PredicciÃ³n por barrio')),
+                                       fluidRow(
+                                         column(4,
+                                                dateRangeInput("PredBarrdates", "Ventana de tiempo",
+                                                               start = "2014-01-01",
+                                                               end = "2014-12-01",
+                                                               min = "2014-01-01",
+                                                               max = "2018-12-31",
+                                                               separator = " - ")
+                                         ),
+                                         column(4, 
+                                                selectInput("barrioPred",
+                                                            "Barrio:",
+                                                            unique(as.character(datos$BARRIO))
+                                                )
+                                         ),
+                                         column(4, 
+                                                selectInput("escalaBarr",
+                                                            "Escala:",
+                                                            c("Mes", "Semana", "Dia")
+                                                )
+                                         )
+                                       ),
+                                       fluidRow(
+                                         column(12, align="center",
+                                                actionButton("predecirBarr", "Predecir")
+                                         )
+                                       ),
+                                 DT::dataTableOutput('tablePredBarr'),
+                                 div(id='NotaBarr', align='center', strong('Importante: '),p('Los dias faltantes en la prediccion cuando se seleccione la escala "Dia"
+                                                                      son los dias en los que no ocurren accidentes', style = "color:red"))
                                  )
-                               ),
-                               fluidRow(
-                                 column(12, align="center",
-                                        actionButton("showMesBarrio", "Predecir")
-                                 )
-                               ),
-                               div(id='divtitS', align='center', h3('Predictor por Semana')),
-                               fluidRow(
-                                 column(4,
-                                        selectInput("barrioSEMPred",
-                                                    "Barrio:",
-                                                    unique(as.character(datos$BARRIO))
-                                        )
-                                 ),
-                                 column(4, 
-                                        selectInput("anoSEMPredBarrio",
-                                                    "Anio:",
-                                                    unique(as.character(datos$PERIODO))
-                                        )
-                                 ),
-                                 column(4, 
-                                        selectInput("semPredBarrio",
-                                                    "Semana:",
-                                                    1:50
-                                        )
-                                 )
-                               ),
-                               fluidRow(
-                                 column(12, align="center",
-                                        actionButton("showSemBarrio", "Predecir")
-                                 )
-                               ),
-                               div(id='divtitD', align='center', h3('Predictor por Día')),
-                               fluidRow(
-                                 column(3,
-                                        selectInput("barrioDIAPred",
-                                                    "Barrio:",
-                                                    unique(as.character(datos$BARRIO))
-                                        )
-                                 ),
-                                 column(3, 
-                                        selectInput("anoDIAPredBarrio",
-                                                    "Anio:",
-                                                    unique(as.character(datos$PERIODO))
-                                        )
-                                 ),
-                                 column(3, 
-                                        selectInput("mesDIAPredBarrio",
-                                                    "Mes:",
-                                                    1:12
-                                        )
-                                 ),
-                                 column(3, 
-                                        selectInput("diaPredBarrio",
-                                                    "Dia:",
-                                                    1:31
-                                        )
-                                 )
-                               ),
-                               fluidRow(
-                                 column(12, align="center",
-                                        actionButton("showDiaBarrio", "Predecir")
-                                 )
-                               )
-                        )
-                        
-                      )
              )
       )
 )
@@ -368,139 +259,117 @@ server <- function(input, output, session) {
     m=addPolygons(m,popup=barrios_med@data$BARRIO,color=barrios_med@data$CATEGORIA)
   })
   
-  observeEvent(input$showMes, {
-    comaPred <- subset(datos, COMUNA == input$comuMESPred  & PERIODO == input$anoMESPred & MES == input$mesPred)
-    m19 <- cforest(N_ACC_MES_COMUNA~PERIODO+CLASE+DISENO+GRAVEDAD+MES,
-                   data = comaPred,
-                   controls = cforest_unbiased(ntree = 100, mtry = 5))
-    #m19
-    p <- predict(m19, comaPred, OOB = TRUE,
-                 type = "response")
-    pred <- strtoi(p)
-    marco <- data.frame(Anio = comaPred$PERIODO, Mes = comaPred$MES, Predicciones = pred)
-    res <- unique(marco)
-    res <- res[!is.na(res$Predicciones),]
-    showModal(modalDialog(title = paste(paste(paste("Predicción para el anio ", comaPred$PERIODO), " en el mes "), comaPred$MES), 
-                          paste("Número de accidentes: ", res$Predicciones),
-                          easyClose = TRUE
-    )
-    )
+  
+  #Tabla prediccion por comuna
+  
+  predCom <- eventReactive(input$predecirCom, {
+    comaPred <- subset(datos, COMUNA == input$comuPred  & FECHA >= input$PredComdates[1]  & FECHA <= input$PredComdates[2])
+    if(input$escala == "Mes"){
+      modeloComunaMes <- cforest(N_ACC_MES_COMUNA~PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+                     data = comaPred,
+                     controls = cforest_unbiased(ntree = 100, mtry = 5))
+      p <- predict(modeloComunaMes, comaPred, OOB = TRUE,
+                   type = "response")
+      pred <- strtoi(p)
+      marco <- data.frame(Anio = comaPred$PERIODO, Mes = comaPred$MES, Predicciones = pred)
+      res <- unique(marco)
+      res <- res[!is.na(res$Predicciones),]
+      res <- res[order(res$Anio, res$Mes),]
+    }
+    if(input$escala == "Semana"){
+      modeloComunaSem <- cforest(N_ACC_SEMANA_COMUNA~DIA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+                     data = comaPred,
+                     controls = cforest_unbiased(ntree = 100, mtry = 5))
+      pMES <- predict(modeloComunaSem, comaPred, OOB = TRUE,
+                      type = "response")
+      predMES <- round(pMES)
+      marcoMES <- data.frame(Anio = comaPred$PERIODO, semana = comaPred$semana, Predicciones = predMES)
+      res <- unique(marcoMES)
+      #Selecciona un solo registro de cada semana
+      res <- res %>%
+        group_by(Anio,semana) %>%
+        slice(1)
+      res <- res[order(res$Anio, res$semana),]
+    }
+    if(input$escala == "Dia"){
+      modeloComunaDia <- cforest(N_ACC_DIA_COMUNA~DIA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+                     data = comaPred,
+                     controls = cforest_unbiased(ntree = 100, mtry = 5))
+      pDIA <- predict(modeloComunaDia, comaPred, OOB = TRUE,
+                      type = "response")
+      pDIA <- round(pDIA)
+      marcoDIA <- data.frame(Anio = comaPred$PERIODO, Mes = comaPred$MES, Dia = comaPred$DIA, Predicciones = pDIA)
+      #Selecciona un solo registro de cada día
+      res <- marcoDIA %>%
+        group_by(Dia,Mes,Anio) %>%
+        slice(1)
+      res <- res[order(res$Anio, res$Mes, res$Dia),]
+    }
+    res
   })
   
-  observeEvent(input$showSem, {
-    comaPredMES <- subset(datos, COMUNA == input$comuSEMPred & PERIODO == input$anoSEMPred & semana == input$semPred)
-    mmm <- cforest(N_ACC_SEMANA_COMUNA~DIA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
-                   data = comaPredMES,
-                   controls = cforest_unbiased(ntree = 100, mtry = 5))
-    #mmm
-    pMES <- predict(mmm, comaPredMES, OOB = TRUE,
-                    type = "response")
-    predMES <- strtoi(pMES)
-    marcoMES <- data.frame(Anio = comaPredMES$PERIODO, semana = comaPredMES$semana, Predicciones = predMES)
-    resMES <- unique(marcoMES)
-    resMES <- resMES[!is.na(resMES$Predicciones),]
-    showModal(modalDialog(title = paste(paste(paste("Predicción para la semana ", input$semPred), " del anio "), input$anoSEMPred), 
-                          paste("Número de accidentes: ", resMES$Predicciones),
-                          easyClose = TRUE
-    )
-    )
+  output$tablePredCom <- DT::renderDataTable(DT::datatable({
+    predCom()
+  }))
+  
+  #FIN
+  
+  #Tabla prediccion por barrio
+  
+  predBarr <- eventReactive(input$predecirBarr, {
+    barraPred <- subset(datos, BARRIO == input$barrioPred)
+    if(input$escalaBarr == "Mes"){
+      modeloBarrioMes <- cforest(N_ACC_MES_BARRIO~COMUNA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+                                 data = barraPred,
+                                 controls = cforest_unbiased(ntree = 150, mtry = 4))
+      
+      pMesBarrio <- predict(modeloBarrioMes, barraPred, OOB = TRUE,
+                            type = "response")
+      pMesBarrio <- round(pMesBarrio)
+      marco <- data.frame(FECHA = barraPred$FECHA, Anio = barraPred$PERIODO, Mes = barraPred$MES, Predicciones = pMesBarrio)
+      marco <- subset(marco, FECHA >= input$PredBarrdates[1]  & FECHA <= input$PredBarrdates[2])
+      marco <- marco[,-1]
+      res <- marco %>%
+        group_by(Anio,Mes) %>%
+        slice(1)
+      res <- res[order(res$Anio, res$Mes),]
+    }
+    if(input$escalaBarr == "Semana"){
+      modeloBarrioSem <- cforest(N_ACC_SEMANA_BARRIO~COMUNA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+                     data = barraPred,
+                     controls = cforest_unbiased(ntree = 100, mtry = 4))
+      pSemBarrio <- predict(modeloBarrioSem, barraPred, OOB = TRUE,
+                            type = "response")
+      pSemBarrio <- round(pSemBarrio)
+      marco <- data.frame(FECHA = barraPred$FECHA, Anio = barraPred$PERIODO, semana = barraPred$semana, Predicciones = pSemBarrio)
+      marco <- subset(marco, FECHA >= input$PredBarrdates[1]  & FECHA <= input$PredBarrdates[2])
+      marco <- marco[,-1]
+      res <- marco %>%
+        group_by(Anio,semana) %>%
+        slice(1)
+      res <- res[order(res$Anio, res$semana),]
+    }
+    if(input$escalaBarr == "Dia"){
+      modeloBarrioDia <- cforest(N_ACC_DIA_BARRIO~DIA+COMUNA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
+                     data = barraPred,
+                     controls = cforest_unbiased(ntree = 100, mtry = 4))
+      pDiaBarrio <- predict(modeloBarrioDia, barraPred, OOB = TRUE,
+                            type = "response")
+      pDiaBarrio <- round(pDiaBarrio)
+      marco <- data.frame(FECHA = barraPred$FECHA, Anio = barraPred$PERIODO, Mes = barraPred$MES, Dia =  barraPred$DIA, Predicciones = pDiaBarrio)
+      marco <- subset(marco, FECHA >= input$PredBarrdates[1]  & FECHA <= input$PredBarrdates[2])
+      marco <- marco[,-1]
+      res <- marco %>%
+        group_by(Dia,Mes,Anio) %>%
+        slice(1)
+      res <- res[order(res$Anio, res$Mes, res$Dia),]
+    }
+    res
   })
   
-  observeEvent(input$showDia, {
-    comaPredDIA <- subset(datos, COMUNA == input$comuDIAPred & PERIODO == input$anoDIAPred & MES == input$mesDIAPred)
-    mmm <- cforest(N_ACC_DIA_COMUNA~DIA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
-                   data = comaPredDIA,
-                   controls = cforest_unbiased(ntree = 100, mtry = 5))
-    pDIA <- predict(mmm, comaPredDIA, OOB = TRUE,
-                    type = "response")
-    marcoDIA <- data.frame(Anio = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = pDIA)
-    marcoDIA <- subset(marcoDIA, Dia == input$diaPred)
-    resDIA <- mean(marcoDIA$N_ACC_DIA_COMUNA)
-    if(is.nan(resDIA)){
-      resDIA<-"No ocurriran accidentes"
-    }
-    else{
-      resDIA <- round(resDIA)
-    }
-    showModal(modalDialog(title = paste(paste(paste(paste(paste("Predicción para el día ", input$diaPred), " del mes "), input$mesDIAPred), "del anio "), input$anoDIAPred), 
-                          paste("Número de accidentes: ", resDIA),
-                          easyClose = TRUE
-    )
-    )
-  })
-  
-  observeEvent(input$showMesBarrio, {
-    comaPredMesBarrio <- subset(datos, BARRIO == input$barrioMESPred)
-    
-    modeloBarrioMes <- cforest(N_ACC_MES_BARRIO~COMUNA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
-                               data = comaPredMesBarrio,
-                               controls = cforest_unbiased(ntree = 150, mtry = 4))
-    
-    pMesBarrio <- predict(modeloBarrioMes, comaPredMesBarrio, OOB = TRUE,
-                          type = "response")
-    
-    marco <- data.frame(Anio = comaPredMesBarrio$PERIODO, Mes = comaPredMesBarrio$MES, Predicciones = pMesBarrio)
-    marco <- subset(marco, Anio == input$anoMESPredBarrio & Mes == input$mesPredBarrio)
-    resMesBarrio <- mean(marco$N_ACC_MES_BARRIO)
-    if(is.na(resMesBarrio)){
-      resMesBarrio<-"No ocurriran accidentes"
-    }
-    else{
-      resMesBarrio <- round(resMesBarrio)
-    }
-    showModal(modalDialog(title = paste(paste(paste("Predicción para el anio ", comaPredMesBarrio$PERIODO), " en el mes "), comaPredMesBarrio$MES), 
-                          paste("Número de accidentes: ", resMesBarrio),
-                          easyClose = TRUE
-    )
-    )
-  })
-  
-  observeEvent(input$showSemBarrio, {
-    comaPredMES <- subset(datos, BARRIO == input$barrioSEMPred)
-    mmm <- cforest(N_ACC_SEMANA_BARRIO~COMUNA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
-                   data = comaPredMES,
-                   controls = cforest_unbiased(ntree = 100, mtry = 4))
-    
-    pMES <- predict(mmm, comaPredMES, OOB = TRUE,
-                    type = "response")
-    marcoMES <- data.frame(Anio = comaPredMES$PERIODO, semana = comaPredMES$semana, Predicciones = pMES)
-    marcoMES <- subset(marcoMES, Anio == input$anoSEMPredBarrio & semana == input$semPredBarrio)
-    resMES <- mean(marcoMES$N_ACC_SEMANA_BARRIO)
-    if(is.na(resMES)){
-      resMES<-"No ocurriran accidentes"
-    }
-    else{
-      resMES <- round(resMES)
-    }
-    showModal(modalDialog(title = paste(paste(paste("Predicción para la semana ", input$semPredBarrio), " del anio "), input$anoSEMPredBarrio), 
-                          paste("Número de accidentes: ", resMES),
-                          easyClose = TRUE
-    )
-    )
-  })
-  
-  observeEvent(input$showDiaBarrio, {
-    comaPredDIA <- subset(datos, BARRIO == input$barrioDIAPred)
-    mmm <- cforest(N_ACC_DIA_BARRIO~DIA+COMUNA+PERIODO+CLASE+DISENO+GRAVEDAD+MES,
-                   data = comaPredDIA,
-                   controls = cforest_unbiased(ntree = 100, mtry = 4))
-    pDIA <- predict(mmm, comaPredDIA, OOB = TRUE,
-                    type = "response")
-    marcoDIA <- data.frame(Anio = comaPredDIA$PERIODO, Mes = comaPredDIA$MES, Dia = comaPredDIA$DIA, Predicciones = pDIA)
-    marcoDIA <- subset(marcoDIA, Anio == input$anoDIAPredBarrio & Mes == input$mesDIAPredBarrio & Dia == input$diaPred)
-    resDIA <- mean(marcoDIA$N_ACC_DIA_COMUNA)
-    if(is.na(resDIA)){
-      resDIA<-"No ocurriran accidentes"
-    }
-    else{
-      resDIA <- round(resDIA)
-    }
-    showModal(modalDialog(title = paste(paste(paste(paste(paste("Predicción para el día ", input$diaPredBarrio), " del mes "), input$mesDIAPredBarrio), "del anio "), input$anoDIAPredBarrio), 
-                          paste("Número de accidentes: ", resDIA),
-                          easyClose = TRUE
-    )
-    )
-  })
+  output$tablePredBarr <- DT::renderDataTable(DT::datatable({
+    predBarr()
+  }))
 }
 
 
