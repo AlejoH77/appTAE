@@ -40,7 +40,7 @@ ui <- fluidPage(title = "Accident Factory",
                             h1("Accident Factory", align="center", style = "font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;  font-size:4;font-weight: 1000; color:darkorange;"),
                             div(class="row",
                                 div(class="col-md-10  col-md-offset-1 videoWrapper",
-                                    iframe(src = "https://www.youtube.com/embed/LOZkDdE8jr0", height="40%", width="80%")
+                                    iframe(frameborder="0" ,width="560" ,height="315", src="https://biteable.com/watch/embed/accident-factory-2299090" ,allowfullscreen="true", allow="autoplay")
                                 )
                             )
                         )
